@@ -206,8 +206,8 @@ class Providers:
     @staticmethod
     async def get_all_info(handle_errors=True) -> {}:
         info = {}
-        for coin in Utils.PROVIDERS:
-            for explorer in Utils.PROVIDERS[coin]:
+        for coin in Providers.PROVIDERS:
+            for explorer in Providers.PROVIDERS[coin]:
                 res = await explorer.get_status()
                 if handle_errors and res.error_message:
                     # TODO: Logging
@@ -218,14 +218,14 @@ class Providers:
     @staticmethod
     async def get_info_by_coin(coin: str) -> []:
         info = []
-        for provider in Utils.PROVIDERS[coin.upper()]:
+        for provider in Providers.PROVIDERS[coin.upper()]:
             info.append(await provider.get_status())
         return info
 
     @staticmethod
     async def get_best_height_by_coin(coin: str) -> int:
         height_lst = []
-        for provider in Utils.PROVIDERS[coin.upper()]:
+        for provider in Providers.PROVIDERS[coin.upper()]:
             res = await provider.get_status()
             if res.height > 0:
                 height_lst.append(res.height)
