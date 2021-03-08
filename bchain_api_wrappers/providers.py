@@ -1,5 +1,5 @@
-import nodes
-import blockexplorers
+import bchain_api_wrappers.nodes as nodes
+import bchain_api_wrappers.blockexplorers as blockexplorers
 
 
 class Providers:
