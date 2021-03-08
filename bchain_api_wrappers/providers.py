@@ -202,30 +202,31 @@ TX_PROVIDERS = {
     ],
 }
 
+class Utils:
+    @staticmethod
+    async def get_all_info(handle_errors=True) -> {}:
+        info = {}
+        for coin in PROVIDERS:
+            for explorer in PROVIDERS[coin]:
+                res = await explorer.get_status()
+                if handle_errors and res.error_message:
+                    # TODO: Logging
+                    continue
+                info[coin].append(res)
+        return info
 
-async def get_all_info(handle_errors=True) -> {}:
-    info = {}
-    for coin in PROVIDERS:
-        for explorer in PROVIDERS[coin]:
-            res = await explorer.get_status()
-            if handle_errors and res.error_message:
-                # TODO: Logging
-                continue
-            info[coin].append(res)
-    return info
+    @staticmethod
+    async def get_info_by_coin(coin: str) -> []:
+        info = []
+        for provider in PROVIDERS[coin.upper()]:
+            info.append(await provider.get_status())
+        return info
 
-
-async def get_info_by_coin(coin: str) -> []:
-    info = []
-    for provider in PROVIDERS[coin.upper()]:
-        info.append(await provider.get_status())
-    return info
-
-
-async def get_best_height_by_coin(coin: str) -> int:
-    height_lst = []
-    for provider in PROVIDERS[coin.upper()]:
-        res = await provider.get_status()
-        if res.height > 0:
-            height_lst.append(res.height)
-    return max(height_lst) if len(height_lst) > 0 else 0
+    @staticmethod
+    async def get_best_height_by_coin(coin: str) -> int:
+        height_lst = []
+        for provider in PROVIDERS[coin.upper()]:
+            res = await provider.get_status()
+            if res.height > 0:
+                height_lst.append(res.height)
+        return max(height_lst) if len(height_lst) > 0 else 0
